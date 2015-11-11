@@ -4,6 +4,8 @@
 __author__ = 'ipetrash'
 
 
+import io
+
 from PySide.QtGui import *
 from PySide.QtCore import *
 
@@ -34,10 +36,18 @@ class MainWindow(QMainWindow, QObject):
         # Выполнение кода в окне "Выполнение скрипта"
         self.ui.button_exec.clicked.connect(lambda x=None: exec(self.ui.code.toPlainText()))
 
-    def slog(self, text):
+    def slog(self, *args, **kwargs):
         """Функция для добавления текста в виджет-лог, находящегося на форме."""
 
-        self.ui.simple_log.appendPlainText('{}'.format(text))
+        # Используем стандартный print для печати в строку
+        str_io = io.StringIO()
+        kwargs['file'] = str_io
+        kwargs['end'] = ''
+
+        print(*args, **kwargs)
+
+        text = str_io.getvalue()
+        self.ui.simple_log.appendPlainText(text)
 
     def read_settings(self):
         # TODO: при сложных настройках, лучше перейти на json или yaml

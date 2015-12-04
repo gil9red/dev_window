@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Fri Dec  4 20:07:42 2015
+# Created: Fri Dec  4 22:42:27 2015
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,14 +12,14 @@ from PySide import QtCore, QtGui
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(847, 573)
+        MainWindow.resize(864, 692)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 847, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 864, 21))
         self.menubar.setObjectName("menubar")
         self.menuDockWindow = QtGui.QMenu(self.menubar)
         self.menuDockWindow.setObjectName("menuDockWindow")
@@ -48,12 +48,12 @@ class Ui_MainWindow(object):
         self.dockWidgetContents = QtGui.QWidget()
         self.dockWidgetContents.setObjectName("dockWidgetContents")
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.dockWidgetContents)
-        self.verticalLayout_3.setSpacing(3)
-        self.verticalLayout_3.setContentsMargins(-1, 3, -1, -1)
+        self.verticalLayout_3.setSpacing(2)
+        self.verticalLayout_3.setContentsMargins(-1, 2, -1, -1)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.clear_slog = QtGui.QToolButton(self.dockWidgetContents)
-        self.clear_slog.setObjectName("clear_slog")
-        self.verticalLayout_3.addWidget(self.clear_slog)
+        self.button_clear_slog = QtGui.QToolButton(self.dockWidgetContents)
+        self.button_clear_slog.setObjectName("button_clear_slog")
+        self.verticalLayout_3.addWidget(self.button_clear_slog)
         self.simple_log = QtGui.QPlainTextEdit(self.dockWidgetContents)
         self.simple_log.setObjectName("simple_log")
         self.verticalLayout_3.addWidget(self.simple_log)
@@ -62,11 +62,34 @@ class Ui_MainWindow(object):
         self.toolBarGeneral = QtGui.QToolBar(MainWindow)
         self.toolBarGeneral.setObjectName("toolBarGeneral")
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBarGeneral)
+        self.dock_widget_output = QtGui.QDockWidget(MainWindow)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.dock_widget_output.sizePolicy().hasHeightForWidth())
+        self.dock_widget_output.setSizePolicy(sizePolicy)
+        self.dock_widget_output.setObjectName("dock_widget_output")
+        self.dockWidgetContents_3 = QtGui.QWidget()
+        self.dockWidgetContents_3.setObjectName("dockWidgetContents_3")
+        self.verticalLayout_4 = QtGui.QVBoxLayout(self.dockWidgetContents_3)
+        self.verticalLayout_4.setSpacing(2)
+        self.verticalLayout_4.setContentsMargins(-1, 2, -1, -1)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.button_clear_output = QtGui.QToolButton(self.dockWidgetContents_3)
+        self.button_clear_output.setObjectName("button_clear_output")
+        self.verticalLayout_4.addWidget(self.button_clear_output)
+        self.output = QtGui.QTextEdit(self.dockWidgetContents_3)
+        self.output.setReadOnly(True)
+        self.output.setObjectName("output")
+        self.verticalLayout_4.addWidget(self.output)
+        self.dock_widget_output.setWidget(self.dockWidgetContents_3)
+        MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(8), self.dock_widget_output)
         self.menubar.addAction(self.menuDockWindow.menuAction())
         self.menubar.addAction(self.menuTools.menuAction())
 
         self.retranslateUi(MainWindow)
-        QtCore.QObject.connect(self.clear_slog, QtCore.SIGNAL("clicked()"), self.simple_log.clear)
+        QtCore.QObject.connect(self.button_clear_slog, QtCore.SIGNAL("clicked()"), self.simple_log.clear)
+        QtCore.QObject.connect(self.button_clear_output, QtCore.SIGNAL("clicked()"), self.output.clear)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -76,8 +99,10 @@ class Ui_MainWindow(object):
         self.button_exec.setText(QtGui.QApplication.translate("MainWindow", "Выполнить", None, QtGui.QApplication.UnicodeUTF8))
         self.button_exec.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+Return", None, QtGui.QApplication.UnicodeUTF8))
         self.dock_widget_simple_log.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Простой лог", None, QtGui.QApplication.UnicodeUTF8))
-        self.clear_slog.setToolTip(QtGui.QApplication.translate("MainWindow", "Очистить лог", None, QtGui.QApplication.UnicodeUTF8))
-        self.clear_slog.setStatusTip(QtGui.QApplication.translate("MainWindow", "Очистить лог", None, QtGui.QApplication.UnicodeUTF8))
-        self.clear_slog.setText(QtGui.QApplication.translate("MainWindow", "Очистить лог", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_clear_slog.setToolTip(QtGui.QApplication.translate("MainWindow", "Очистить лог", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_clear_slog.setStatusTip(QtGui.QApplication.translate("MainWindow", "Очистить лог", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_clear_slog.setText(QtGui.QApplication.translate("MainWindow", "Очистить", None, QtGui.QApplication.UnicodeUTF8))
         self.toolBarGeneral.setWindowTitle(QtGui.QApplication.translate("MainWindow", "General", None, QtGui.QApplication.UnicodeUTF8))
+        self.dock_widget_output.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Вывод", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_clear_output.setText(QtGui.QApplication.translate("MainWindow", "Очистить", None, QtGui.QApplication.UnicodeUTF8))
 

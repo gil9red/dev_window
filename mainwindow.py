@@ -16,6 +16,39 @@ from common import *
 logger = get_logger('main_window')
 
 
+import sys
+
+from PySide.QtCore import QObject, Signal
+
+
+class OutputLogger(QObject):
+    class Severity:
+        DEBUG = 0
+        ERROR = 1
+
+    def __init__(self, io_stream, severity):
+        super().__init__()
+
+        self.io_stream = io_stream
+        self.severity = severity
+
+    def write(self, text):
+        self.io_stream.write(text)
+        self.emit_write.emit(text, self.severity)
+
+    def flush(self):
+        self.io_stream.flush()
+
+    emit_write = Signal(str, int)
+
+
+OUTPUT_LOGGER_STDOUT = OutputLogger(sys.stdout, OutputLogger.Severity.DEBUG)
+OUTPUT_LOGGER_STDERR = OutputLogger(sys.stderr, OutputLogger.Severity.ERROR)
+
+sys.stdout = OUTPUT_LOGGER_STDOUT
+sys.stderr = OUTPUT_LOGGER_STDERR
+
+
 class MainWindow(QMainWindow, QObject):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -36,6 +69,9 @@ class MainWindow(QMainWindow, QObject):
         # Выполнение кода в окне "Выполнение скрипта"
         self.ui.button_exec.clicked.connect(self.exec_script)
 
+        OUTPUT_LOGGER_STDOUT.emit_write.connect(self.write_output)
+        OUTPUT_LOGGER_STDERR.emit_write.connect(self.write_output)
+
     def exec_script(self):
         has_selected = self.ui.code.textCursor().hasSelection()
         if has_selected:
@@ -49,6 +85,30 @@ class MainWindow(QMainWindow, QObject):
             code = self.ui.code.toPlainText()
 
         exec(code.strip())
+
+    def write_output(self, text, severity):
+        """Функция для добавления сообщения с указанием серьезности (Debug, Error)."""
+
+        # save
+        text_cursor = self.ui.output.textCursor()
+        orig_fmt = text_cursor.charFormat()
+        fmt = QTextCharFormat()
+
+        # modify
+        if severity == OutputLogger.Severity.ERROR:
+            fmt.setFontWeight(QFont.DemiBold)
+            fmt.setForeground(Qt.red)
+
+        # append
+        text_cursor.movePosition(QTextCursor.End)
+        text_cursor.setCharFormat(fmt)
+        text_cursor.insertText(text)
+
+        # restore
+        text_cursor.setCharFormat(orig_fmt)
+
+    def clear_slog(self):
+        self.ui.simple_log.clear()
 
     def slog(self, *args, **kwargs):
         """Функция для добавления текста в виджет-лог, находящегося на форме."""

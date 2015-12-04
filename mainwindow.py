@@ -48,15 +48,19 @@ class MainWindow(QMainWindow, QObject):
     def slog(self, *args, **kwargs):
         """Функция для добавления текста в виджет-лог, находящегося на форме."""
 
-        # Используем стандартный print для печати в строку
-        str_io = io.StringIO()
-        kwargs['file'] = str_io
-        kwargs['end'] = ''
+        try:
+            # Используем стандартный print для печати в строку
+            str_io = io.StringIO()
+            kwargs['file'] = str_io
+            kwargs['end'] = ''
 
-        print(*args, **kwargs)
+            print(*args, **kwargs)
 
-        text = str_io.getvalue()
-        self.ui.simple_log.appendPlainText(text)
+            text = str_io.getvalue()
+            self.ui.simple_log.appendPlainText(text)
+
+        except Exception as e:
+            self.ui.simple_log.appendPlainText(str(e))
 
     def read_settings(self):
         # TODO: при сложных настройках, лучше перейти на json или yaml

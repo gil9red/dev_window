@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Fri Dec  4 22:42:27 2015
+# Created: Fri Dec  4 23:44:29 2015
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -31,17 +31,23 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.dock_widget_exec = QtGui.QDockWidget(MainWindow)
         self.dock_widget_exec.setObjectName("dock_widget_exec")
-        self.dockWidgetContents_2 = QtGui.QWidget()
-        self.dockWidgetContents_2.setObjectName("dockWidgetContents_2")
-        self.verticalLayout_2 = QtGui.QVBoxLayout(self.dockWidgetContents_2)
+        self.dock_widget_exec_contents = QtGui.QWidget()
+        self.dock_widget_exec_contents.setObjectName("dock_widget_exec_contents")
+        self.verticalLayout_2 = QtGui.QVBoxLayout(self.dock_widget_exec_contents)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.button_exec = QtGui.QPushButton(self.dockWidgetContents_2)
+        self.button_exec = QtGui.QPushButton(self.dock_widget_exec_contents)
         self.button_exec.setObjectName("button_exec")
         self.verticalLayout_2.addWidget(self.button_exec)
-        self.code = QtGui.QPlainTextEdit(self.dockWidgetContents_2)
-        self.code.setObjectName("code")
-        self.verticalLayout_2.addWidget(self.code)
-        self.dock_widget_exec.setWidget(self.dockWidgetContents_2)
+        self.container_code_editor = QtGui.QScrollArea(self.dock_widget_exec_contents)
+        self.container_code_editor.setFrameShape(QtGui.QFrame.NoFrame)
+        self.container_code_editor.setWidgetResizable(True)
+        self.container_code_editor.setObjectName("container_code_editor")
+        self.scrollAreaWidgetContents = QtGui.QWidget()
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 256, 160))
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.container_code_editor.setWidget(self.scrollAreaWidgetContents)
+        self.verticalLayout_2.addWidget(self.container_code_editor)
+        self.dock_widget_exec.setWidget(self.dock_widget_exec_contents)
         MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.dock_widget_exec)
         self.dock_widget_simple_log = QtGui.QDockWidget(MainWindow)
         self.dock_widget_simple_log.setObjectName("dock_widget_simple_log")

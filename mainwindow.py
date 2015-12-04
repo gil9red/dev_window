@@ -16,37 +16,14 @@ from common import *
 logger = get_logger('main_window')
 
 
-import sys
-
-from PySide.QtCore import QObject, Signal
-
-
-class OutputLogger(QObject):
-    class Severity:
-        DEBUG = 0
-        ERROR = 1
-
-    def __init__(self, io_stream, severity):
-        super().__init__()
-
-        self.io_stream = io_stream
-        self.severity = severity
-
-    def write(self, text):
-        self.io_stream.write(text)
-        self.emit_write.emit(text, self.severity)
-
-    def flush(self):
-        self.io_stream.flush()
-
-    emit_write = Signal(str, int)
-
-
 OUTPUT_LOGGER_STDOUT = OutputLogger(sys.stdout, OutputLogger.Severity.DEBUG)
 OUTPUT_LOGGER_STDERR = OutputLogger(sys.stderr, OutputLogger.Severity.ERROR)
 
 sys.stdout = OUTPUT_LOGGER_STDOUT
 sys.stderr = OUTPUT_LOGGER_STDERR
+
+
+# TODO: перевести на английский
 
 
 class MainWindow(QMainWindow, QObject):
@@ -68,21 +45,23 @@ class MainWindow(QMainWindow, QObject):
 
         # Выполнение кода в окне "Выполнение скрипта"
         self.ui.button_exec.clicked.connect(self.exec_script)
+        self.code_editor = create_code_editor()
+        self.ui.container_code_editor.setWidget(self.code_editor)
 
         OUTPUT_LOGGER_STDOUT.emit_write.connect(self.write_output)
         OUTPUT_LOGGER_STDERR.emit_write.connect(self.write_output)
 
     def exec_script(self):
-        has_selected = self.ui.code.textCursor().hasSelection()
+        has_selected = self.code_editor.textCursor().hasSelection()
         if has_selected:
             # http://doc.qt.io/qt-4.8/qtextcursor.html#selectedText
             # Note: If the selection obtained from an editor spans a line break, the text will contain a
             # Unicode U+2029 paragraph separator character instead of a newline \n character. Use QString::replace()
             # to replace these characters with newlines.
-            code = self.ui.code.textCursor().selectedText()
+            code = self.code_editor.textCursor().selectedText()
             code = code.replace('\u2029', '\n')
         else:
-            code = self.ui.code.toPlainText()
+            code = self.code_editor.toPlainText()
 
         exec(code.strip())
 

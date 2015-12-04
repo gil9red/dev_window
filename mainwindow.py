@@ -39,7 +39,12 @@ class MainWindow(QMainWindow, QObject):
     def exec_script(self):
         has_selected = self.ui.code.textCursor().hasSelection()
         if has_selected:
+            # http://doc.qt.io/qt-4.8/qtextcursor.html#selectedText
+            # Note: If the selection obtained from an editor spans a line break, the text will contain a
+            # Unicode U+2029 paragraph separator character instead of a newline \n character. Use QString::replace()
+            # to replace these characters with newlines.
             code = self.ui.code.textCursor().selectedText()
+            code = code.replace('\u2029', '\n')
         else:
             code = self.ui.code.toPlainText()
 

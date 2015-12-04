@@ -32,7 +32,16 @@ class MainWindow(QMainWindow, QObject):
             self.ui.menuTools.addAction(tool.toggleViewAction())
 
         # Выполнение кода в окне "Выполнение скрипта"
-        self.ui.button_exec.clicked.connect(lambda x=None: exec(self.ui.code.toPlainText()))
+        self.ui.button_exec.clicked.connect(self.exec_script)
+
+    def exec_script(self):
+        has_selected = self.ui.code.textCursor().hasSelection()
+        if has_selected:
+            code = self.ui.code.textCursor().selectedText()
+        else:
+            code = self.ui.code.toPlainText()
+
+        exec(code)
 
     def slog(self, text):
         """Функция для добавления текста в виджет-лог, находящегося на форме."""

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Tue Nov 10 22:06:39 2015
+# Created: Fri Dec  4 20:07:42 2015
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -74,6 +74,7 @@ class Ui_MainWindow(object):
         self.menuTools.setTitle(QtGui.QApplication.translate("MainWindow", "Tools", None, QtGui.QApplication.UnicodeUTF8))
         self.dock_widget_exec.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Выполнение скрипта", None, QtGui.QApplication.UnicodeUTF8))
         self.button_exec.setText(QtGui.QApplication.translate("MainWindow", "Выполнить", None, QtGui.QApplication.UnicodeUTF8))
+        self.button_exec.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+Return", None, QtGui.QApplication.UnicodeUTF8))
         self.dock_widget_simple_log.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Простой лог", None, QtGui.QApplication.UnicodeUTF8))
         self.clear_slog.setToolTip(QtGui.QApplication.translate("MainWindow", "Очистить лог", None, QtGui.QApplication.UnicodeUTF8))
         self.clear_slog.setStatusTip(QtGui.QApplication.translate("MainWindow", "Очистить лог", None, QtGui.QApplication.UnicodeUTF8))

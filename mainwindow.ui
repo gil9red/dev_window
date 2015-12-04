@@ -50,6 +50,9 @@
        <property name="text">
         <string>Выполнить</string>
        </property>
+       <property name="shortcut">
+        <string>Ctrl+Return</string>
+       </property>
       </widget>
      </item>
      <item>

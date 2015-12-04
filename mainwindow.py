@@ -43,7 +43,7 @@ class MainWindow(QMainWindow, QObject):
         else:
             code = self.ui.code.toPlainText()
 
-        exec(code)
+        exec(code.strip())
 
     def slog(self, *args, **kwargs):
         """Функция для добавления текста в виджет-лог, находящегося на форме."""

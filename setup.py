@@ -9,12 +9,46 @@
 
 from cx_Freeze import setup, Executable
 
-executables = [
-    Executable('main.py')
-]
+includes = ["pkg_resources"]
+excludes = ['tkinter']
+packages = []
 
-setup(name='dev_window',
-      version='0.1',
-      description='dev_window',
-      executables=executables
-      )
+from pyqode.core.api.syntax_highlighter import get_all_styles
+
+# collect pygments styles
+for s in get_all_styles():
+    module = 'pygments.styles.%s' % s.replace('-', '_')
+    try:
+        __import__(module)
+    except ImportError:
+        pass
+    else:
+        includes.append(module)
+        print('pygment style:', module)
+
+
+target = Executable(
+    script='main.py',
+    targetName="dev_window.exe",
+    compress=True,
+    # icon=None,
+)
+
+setup(
+    name='dev_window',
+    version='0.1',
+    author="Ilya Petrash",
+    description='dev_window',
+
+    options={
+        "build_exe": {
+            "includes": includes,
+            "excludes": excludes,
+            "packages": packages,
+            "build_exe": "bin",
+            "namespace_packages": ["pyqode"],
+        }
+    },
+
+    executables=[target]
+)

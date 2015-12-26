@@ -59,7 +59,7 @@ class MainWindow(QMainWindow, QObject):
             # Unicode U+2029 paragraph separator character instead of a newline \n character. Use QString::replace()
             # to replace these characters with newlines.
             code = self.code_editor.textCursor().selectedText()
-            code = code.replace('\u2029', '\n')
+            code = code.replace('\u2028', '\n').replace('\u2029', '\n')
         else:
             code = self.code_editor.toPlainText()
 

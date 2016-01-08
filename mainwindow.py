@@ -23,6 +23,8 @@ sys.stdout = OUTPUT_LOGGER_STDOUT
 sys.stderr = OUTPUT_LOGGER_STDERR
 
 
+CODE_EDITOR_BACKUP = 'code_editor.backup'
+
 # TODO: перевести на английский
 
 
@@ -48,22 +50,74 @@ class MainWindow(QMainWindow, QObject):
         self.code_editor = create_code_editor()
         self.ui.container_code_editor.setWidget(self.code_editor)
 
+        self.write_code_to_editor()
+        self.timer_save_code = QTimer()
+        self.timer_save_code.setSingleShot(True)
+        self.timer_save_code.setInterval(300)
+        self.timer_save_code.timeout.connect(self.save_code_from_editor)
+
+        self.code_editor.textChanged.connect(self.timer_save_code.start)
+
         OUTPUT_LOGGER_STDOUT.emit_write.connect(self.write_output)
         OUTPUT_LOGGER_STDERR.emit_write.connect(self.write_output)
 
-    def exec_script(self):
-        has_selected = self.code_editor.textCursor().hasSelection()
-        if has_selected:
-            # http://doc.qt.io/qt-4.8/qtextcursor.html#selectedText
-            # Note: If the selection obtained from an editor spans a line break, the text will contain a
-            # Unicode U+2029 paragraph separator character instead of a newline \n character. Use QString::replace()
-            # to replace these characters with newlines.
-            code = self.code_editor.textCursor().selectedText()
-            code = code.replace('\u2028', '\n').replace('\u2029', '\n')
-        else:
-            code = self.code_editor.toPlainText()
+    def save_code_from_editor(self):
+        logger.debug('Save code from editor to file: %s. Start.', CODE_EDITOR_BACKUP)
 
-        exec(code.strip())
+        with open(CODE_EDITOR_BACKUP, mode='w', encoding='utf-8') as f:
+            f.write(self.code_editor.toPlainText())
+
+        logger.debug('Finish save code from editor.')
+
+    def write_code_to_editor(self):
+        logger.debug('Write code to editor in file: %s. Start.', CODE_EDITOR_BACKUP)
+
+        try:
+            with open(CODE_EDITOR_BACKUP, encoding='utf-8') as f:
+                self.code_editor.setPlainText(f.read(), None, None)
+
+        except Exception as e:
+            logger.warn(str(e))
+
+        logger.debug('Finish write code to editor.')
+
+    def exec_script(self):
+        try:
+            has_selected = self.code_editor.textCursor().hasSelection()
+            if has_selected:
+                # http://doc.qt.io/qt-4.8/qtextcursor.html#selectedText
+                # Note: If the selection obtained from an editor spans a line break, the text will contain a
+                # Unicode U+2029 paragraph separator character instead of a newline \n character. Use QString::replace()
+                # to replace these characters with newlines.
+                code = self.code_editor.textCursor().selectedText()
+                code = code.replace('\u2028', '\n').replace('\u2029', '\n')
+            else:
+                code = self.code_editor.toPlainText()
+
+            exec(code.strip())
+
+        except Exception as e:
+            import traceback
+
+            # Выводим ошибку в консоль
+            traceback.print_exc()
+
+            # Сохраняем в переменную
+            tb = traceback.format_exc()
+
+            last_error_message = str(e)
+            last_detail_error_message = str(tb)
+
+            message = last_error_message + '\n\n' + last_detail_error_message
+
+            mb = QErrorMessage()
+            mb.setWindowTitle('Error')
+            # Сообщение ошибки содержит отступы, символы-переходы на следующую строку,
+            # которые поломаются при вставке через QErrorMessage.showMessage, и нет возможности
+            # выбрать тип текста, то делаем такой хак.
+            mb.findChild(QTextEdit).setPlainText(message)
+
+            mb.exec_()
 
     def write_output(self, text, severity):
         """Функция для добавления сообщения с указанием серьезности (Debug, Error)."""

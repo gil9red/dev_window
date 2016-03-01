@@ -47,8 +47,15 @@ class MainWindow(QMainWindow, QObject):
 
         # Выполнение кода в окне "Выполнение скрипта"
         self.ui.button_exec.clicked.connect(self.exec_script)
-        self.code_editor = create_code_editor()
-        self.ui.container_code_editor.setWidget(self.code_editor)
+
+        try:
+            self.code_editor = create_code_editor()
+            self.ui.container_code_editor.setWidget(self.code_editor)
+        except Exception as e:
+            logger.warn(e)
+
+            self.code_editor = QPlainTextEdit()
+            self.ui.container_code_editor.setWidget(self.code_editor)
 
         self.write_code_to_editor()
         self.timer_save_code = QTimer()
@@ -74,10 +81,15 @@ class MainWindow(QMainWindow, QObject):
 
         try:
             with open(CODE_EDITOR_BACKUP, encoding='utf-8') as f:
-                self.code_editor.setPlainText(f.read(), None, None)
+                content = f.read()
+
+                try:
+                    self.code_editor.setPlainText(content, None, None)
+                except:
+                    self.code_editor.setPlainText(content)
 
         except Exception as e:
-            logger.warn(str(e))
+            logger.warn(e)
 
         logger.debug('Finish write code to editor.')
 

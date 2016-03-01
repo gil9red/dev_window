@@ -183,6 +183,6 @@ class MainWindow(QMainWindow, QObject):
         config.setValue('MainWindow_State', self.saveState())
         config.setValue('MainWindow_Geometry', self.saveGeometry())
 
-    def closeEvent(self, *args, **kwargs):
+    def closeEvent(self, event):
         self.write_settings()
-        super().closeEvent(*args, **kwargs)
+        quit()

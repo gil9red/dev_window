@@ -9,7 +9,7 @@
 
 from cx_Freeze import setup, Executable
 
-includes = ["pkg_resources"]
+includes = ["pkg_resources", "PySide.QtWebKit"]
 excludes = ['tkinter']
 packages = []
 

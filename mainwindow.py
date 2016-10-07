@@ -6,8 +6,12 @@ __author__ = 'ipetrash'
 
 import io
 
-from PySide.QtGui import *
-from PySide.QtCore import *
+try:
+    from PyQt4.QtGui import *
+    from PyQt4.QtCore import *
+except ImportError:
+    from PySide.QtGui import *
+    from PySide.QtCore import *
 
 from mainwindow_ui import Ui_MainWindow
 from common import *

@@ -5,7 +5,12 @@ __author__ = 'ipetrash'
 
 
 import sys
-from PySide.QtGui import QApplication
+
+try:
+    from PyQt4.QtGui import QApplication
+except ImportError:
+    from PySide.QtGui import QApplication
+
 from mainwindow import MainWindow
 
 

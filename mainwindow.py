@@ -56,7 +56,7 @@ class MainWindow(QMainWindow, QObject):
             self.code_editor = create_code_editor()
             self.ui.container_code_editor.setWidget(self.code_editor)
         except Exception as e:
-            logger.warn(e)
+            logger.exception("Error:")
 
             self.code_editor = QPlainTextEdit()
             self.ui.container_code_editor.setWidget(self.code_editor)
@@ -93,7 +93,7 @@ class MainWindow(QMainWindow, QObject):
                     self.code_editor.setPlainText(content)
 
         except Exception as e:
-            logger.warn(e)
+            logger.exception("Error:")
 
         logger.debug('Finish write code to editor.')
 
@@ -113,12 +113,10 @@ class MainWindow(QMainWindow, QObject):
             exec(code.strip())
 
         except Exception as e:
-            import traceback
-
-            # Выводим ошибку в консоль
-            traceback.print_exc()
-
+            logger.exception("Error:")
+            
             # Сохраняем в переменную
+            import traceback
             tb = traceback.format_exc()
 
             last_error_message = str(e)
